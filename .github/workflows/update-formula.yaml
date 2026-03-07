@@ -21,7 +21,9 @@ jobs:
       - name: Download tarball and compute sha256
         id: sha
         run: |
-          URL="https://registry.npmjs.org/@olane/o-cli/-/o-cli-${{ inputs.version }}.tgz"
+          VERSION="${{ inputs.version }}"
+          VERSION="${VERSION#v}"
+          URL="https://registry.npmjs.org/@olane/o-cli/-/o-cli-${VERSION}.tgz"
           SHA=$(curl -sL "$URL" | shasum -a 256 | awk '{print $1}')
           echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
