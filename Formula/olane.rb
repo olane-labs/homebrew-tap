@@ -1,8 +1,8 @@
 class Olane < Formula
   desc "oLane Network CLI - multi-agent architecture toolkit"
   homepage "https://github.com/olane-labs/o-cli"
-  url "https://registry.npmjs.org/@olane/o-cli/-/o-cli-2.0.10.tgz"
-  sha256 "c4d0ffb291223c05300aa582bf3edbf365762617a57b117507ecb9ed3121bae9"
+  url "https://registry.npmjs.org/@olane/o-cli/-/o-cli-2.0.11.tgz"
+  sha256 "c8d3eae160a892e32837db3dcae515e843e5383fef52b8141940c8bcf8b6d59f"
   license "MIT"
 
   depends_on "node"
