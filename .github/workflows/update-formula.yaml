@@ -3,6 +3,14 @@ name: Update Formula
 on:
   workflow_dispatch:
     inputs:
+      formula:
+        description: "Formula to update"
+        required: true
+        default: "copass"
+        type: choice
+        options:
+          - copass
+          - olane
       version:
         description: "Package version to update to"
         required: true
@@ -18,27 +26,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download tarball and compute sha256
+      - name: Resolve tarball URL + sha256
         id: sha
         run: |
+          FORMULA="${{ inputs.formula }}"
           VERSION="${{ inputs.version }}"
           VERSION="${VERSION#v}"
-          URL="https://registry.npmjs.org/@olane/o-cli/-/o-cli-${VERSION}.tgz"
-          SHA=$(curl -sL "$URL" | shasum -a 256 | awk '{print $1}')
-          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
-          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
+          case "$FORMULA" in
+            copass)
+              URL="https://registry.npmjs.org/@copass/cli/-/cli-${VERSION}.tgz"
+              FORMULA_FILE="Formula/copass.rb"
+              ;;
+            olane)
+              URL="https://registry.npmjs.org/@olane/o-cli/-/o-cli-${VERSION}.tgz"
+              FORMULA_FILE="Formula/olane.rb"
+              ;;
+            *)
+              echo "Unknown formula: $FORMULA" >&2
+              exit 1
+              ;;
+          esac
+
+          echo "Fetching $URL"
+          SHA=$(curl -fsSL "$URL" | shasum -a 256 | awk '{print $1}')
+          if [ -z "$SHA" ]; then
+            echo "Failed to compute sha256 for $URL" >&2
+            exit 1
+          fi
+
+          echo "sha256=$SHA"        >> "$GITHUB_OUTPUT"
+          echo "url=$URL"           >> "$GITHUB_OUTPUT"
+          echo "file=$FORMULA_FILE" >> "$GITHUB_OUTPUT"
 
       - name: Update formula
         run: |
           sed -i \
             -e 's|url ".*"|url "${{ steps.sha.outputs.url }}"|' \
             -e 's|sha256 ".*"|sha256 "${{ steps.sha.outputs.sha256 }}"|' \
-            Formula/olane.rb
+            "${{ steps.sha.outputs.file }}"
 
       - name: Commit and push
         run: |
-          git config user.name "github-actions[bot]"
+          git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Formula/olane.rb
-          git commit -m "Update olane to ${{ inputs.version }}"
+          git add "${{ steps.sha.outputs.file }}"
+          git commit -m "Update ${{ inputs.formula }} to ${{ inputs.version }}"
           git push
