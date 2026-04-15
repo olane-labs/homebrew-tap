@@ -1,8 +1,8 @@
 class Olane < Formula
   desc "oLane Network CLI (deprecated — use `copass` instead)"
   homepage "https://github.com/olane-labs/o-cli"
-  url "https://registry.npmjs.org/@olane/o-cli/-/o-cli-2.0.8.tgz"
-  sha256 "7fdaf757c1962ee46e8331643953b73fcf6807bc3b884e4b4d73fcd471cb7e4f"
+  url "https://registry.npmjs.org/@olane/o-cli/-/o-cli-2.2.4.tgz"
+  sha256 "0f91eaeedd005e8e041292755ea622630b826a86512ef7cf813e7aa02f1fb4c9"
   license "MIT"
 
   # The upstream npm package was renamed from @olane/o-cli to @copass/cli
