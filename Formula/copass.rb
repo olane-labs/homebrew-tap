@@ -3,8 +3,8 @@ class Copass < Formula
   homepage "https://github.com/olane-labs/o-cli"
   # url + sha256 are bumped automatically by the `Update Formula` workflow
   # on every `@copass/cli` npm release.
-  url "https://registry.npmjs.org/@copass/cli/-/cli-2.2.13.tgz"
-  sha256 "9639b477cb3fb1653de78e5806e3720b0bf1a7540b18eaccfe794fd5c91e25cc"
+  url "https://registry.npmjs.org/@copass/cli/-/cli-2.2.14.tgz"
+  sha256 "1da84e349ee7f4beb75cc81620fde7d800d08235f62b9b4aed04880761850e47"
   license "MIT"
 
   depends_on "node"
